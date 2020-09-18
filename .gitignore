@@ -1,2 +1,7 @@
 venv/
 __pycache__/
+
+local-sp.json
+setup_env.sh
+
+db.sqlite3
