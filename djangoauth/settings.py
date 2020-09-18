@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
+import datetime
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -37,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'core.apps.CoreConfig'
+    'accounts.apps.AccountsConfig'
 ]
 
 MIDDLEWARE = [
@@ -70,6 +71,18 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'djangoauth.wsgi.application'
 
+JWT_AUTH = {
+    'JWT_RESPONSE_PAYLOAD_HANDLER': 'djangoauth.utils.my_jwt_response_handler'
+}
+
+REST_USE_JWT = True
+
+JWT_AUTH = {
+    'JWT_VERIFY': True,
+    'JWT_VERIFY_EXPIRATION': True,
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=3000000),
+    'JWT_AUTH_HEADER_PREFIX': 'Bearer',
+}
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
