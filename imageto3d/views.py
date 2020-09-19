@@ -11,6 +11,10 @@ from rest_framework.authentication import (
 from rest_framework.response import Response
 
 
+def home_page(request):
+    return render(request, 'index.html')
+
+
 class Imageto3dViewset(viewsets.ModelViewSet):
     queryset = Imageto3d.objects.all()
     serializer_class = Imageto3dSerializer

@@ -5,3 +5,4 @@ local-sp.json
 setup_env.sh
 
 db.sqlite3
+azure_constants.py
