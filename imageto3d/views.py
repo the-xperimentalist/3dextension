@@ -1,6 +1,7 @@
 
 from rest_framework import viewsets
 from rest_framework.views import APIView
+from rest_framework import permissions
 from .models import *
 from .serializers import *
 from rest_framework.authentication import (
@@ -13,7 +14,7 @@ from rest_framework.response import Response
 class Imageto3dViewset(viewsets.ModelViewSet):
     queryset = Imageto3d.objects.all()
     serializer_class = Imageto3dSerializer
-    permission_classes = (BasicAuthentication, SessionAuthentication)
+    authentication_classes = (BasicAuthentication, SessionAuthentication)
     http_method_names = ['post', 'patch', 'delete']
 
     def create(self, request, *args, **kwargs):
@@ -27,11 +28,15 @@ class Imageto3dViewset(viewsets.ModelViewSet):
             del modified_img_url[5]
             del modified_img_url[5]
             request.data["image_url"] = " ".join(modified_img_url)
-        elif not domain_name in self.request.user.email:
+        elif not domain_name in self.request.user.username:
             return Response(status=403)
-        super().create(request, *args, **kwargs)
+        request.data["created_by"] = self.request.user.id
+        return super().create(request, *args, **kwargs)
 
-    def retrieve(self, request, *args, **kwargs):
+class Imageto3dAPI(APIView):
+    permission_classes = (permissions.AllowAny,)
+
+    def get(self, request, *args, **kwargs):
         """
         Override the method to return the image url
         """
