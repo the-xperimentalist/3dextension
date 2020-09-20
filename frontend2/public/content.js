@@ -1,149 +1,155 @@
+
+
 // import {OrbitControls} from 'https://threejsfundamentals.org/threejs/resources/threejs/r119/examples/jsm/controls/OrbitControls.js';
 // import {OBJLoader2} from 'https://threejsfundamentals.org/threejs/resources/threejs/r119/examples/jsm/loaders/OBJLoader2.js';
 
-/**
- * Generate a scene object with a background color
- **/
 
-function getScene() {
-    let scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x111111);
-    return scene;
+let hlight, light2, light3, light4, loader, directionalLight, mesh, material
+
+
+  /**
+  * Generate a scene object with a background color
+  **/
+
+ function getScene() {
+  let scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x111111);
+  return scene;
 }
 
 /**
- * Generate the camera to be used in the scene. Camera args:
- *   [0] field of view: identifies the portion of the scene
- *     visible at any time (in degrees)
- *   [1] aspect ratio: identifies the aspect ratio of the
- *     scene in width/height
- *   [2] near clipping plane: objects closer than the near
- *     clipping plane are culled from the scene
- *   [3] far clipping plane: objects farther than the far
- *     clipping plane are culled from the scene
- **/
+* Generate the camera to be used in the scene. Camera args:
+*   [0] field of view: identifies the portion of the scene
+*     visible at any time (in degrees)
+*   [1] aspect ratio: identifies the aspect ratio of the
+*     scene in width/height
+*   [2] near clipping plane: objects closer than the near
+*     clipping plane are culled from the scene
+*   [3] far clipping plane: objects farther than the far
+*     clipping plane are culled from the scene
+**/
 
 function getCamera() {
-    let aspectRatio = window.innerWidth / window.innerHeight;
-    let camera = new THREE.PerspectiveCamera(75, aspectRatio, 0.1, 1000);
-    camera.position.set(0, 1, -10);
-    return camera;
+  let aspectRatio = window.innerWidth / window.innerHeight;
+  let camera = new THREE.PerspectiveCamera(75, aspectRatio, 0.1, 1000);
+  camera.position.set(0, 1, -10);
+  return camera;
 }
 
 /**
- * Generate the light to be used in the scene. Light args:
- *   [0]: Hexadecimal color of the light
- *   [1]: Numeric value of the light's strength/intensity
- *   [2]: The distance from the light where the intensity is 0
- * @param {obj} scene: the current scene object
- **/
+* Generate the light to be used in the scene. Light args:
+*   [0]: Hexadecimal color of the light
+*   [1]: Numeric value of the light's strength/intensity
+*   [2]: The distance from the light where the intensity is 0
+* @param {obj} scene: the current scene object
+**/
 
 function getLight(scene) {
-    let light = new THREE.PointLight(0xffffff, 1, 0);
-    light.position.set(1, 1, 1);
-    scene.add(light);
+  let light = new THREE.PointLight(0xffffff, 1, 0);
+  light.position.set(1, 1, 1);
+  scene.add(light);
 
-    let ambientLight = new THREE.AmbientLight(0x111111);
-    scene.add(ambientLight);
-    return light;
+  let ambientLight = new THREE.AmbientLight(0x111111);
+  scene.add(ambientLight);
+  return light;
 }
 
 /**
- * Generate the renderer to be used in the scene
- **/
+* Generate the renderer to be used in the scene
+**/
 
 function getRenderer() {
-    // Create the canvas with a renderer
-    let canvasElem = document.querySelector("#c");
-    let renderer = new THREE.WebGLRenderer({canvasElem});
-    // Add support for retina displays
-    renderer.setPixelRatio(window.devicePixelRatio);
-    // Specify the size of the canvas
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    // Add the canvas to the DOM
-    document.body.appendChild(renderer.domElement);
-    return renderer;
+  // Create the canvas with a renderer
+  let canvasElem = document.querySelector("#c");
+  let renderer = new THREE.WebGLRenderer({canvasElem});
+  // Add support for retina displays
+  renderer.setPixelRatio(window.devicePixelRatio);
+  // Specify the size of the canvas
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  // Add the canvas to the DOM
+  document.body.appendChild(renderer.domElement);
+  return renderer;
 }
 
 /**
- * Generate the controls to be used in the scene
- * @param {obj} camera: the three.js camera for the scene
- * @param {obj} renderer: the three.js renderer for the scene
- **/
+* Generate the controls to be used in the scene
+* @param {obj} camera: the three.js camera for the scene
+* @param {obj} renderer: the three.js renderer for the scene
+**/
 
 function getControls(camera, renderer) {
-    let controls = new THREE.TrackballControls(camera, renderer.domElement);
-    controls.zoomSpeed = 0.4;
-    controls.panSpeed = 0.4;
-    return controls;
+  let controls = new THREE.TrackballControls(camera, renderer.domElement);
+  controls.zoomSpeed = 0.4;
+  controls.panSpeed = 0.4;
+  return controls;
 }
 
 /**
- * Load Nimrud model
- **/
+* Load Nimrud model
+**/
 
 function loadModel(scene) {
-    let loader = new THREE.OBJLoader();
-    loader.load("https://threejsfundamentals.org/threejs/resources/models/windmill/windmill.obj", function (object) {
-        object.rotation.z = Math.PI;
-        scene.add(object);
-        document.querySelector('h1').style.display = 'none';
-    });
+  let loader = new THREE.OBJLoader();
+  loader.load( "https://threejsfundamentals.org/threejs/resources/models/windmill/windmill.obj", function ( object ) {
+    object.rotation.z = Math.PI;
+    scene.add( object );
+    document.querySelector('h1').style.display = 'none';
+  } );
 }
 
 /**
- * Render!
- **/
+* Render!
+**/
 
-function render(camera, scene, renderer, controls) {
-    requestAnimationFrame(render);
-    console.log(camera)
-    renderer.render(scene, camera);
-    controls.update();
+function render(camera, scene, renderer) {
+  requestAnimationFrame(render);
+  console.log(camera)
+  camera = getCamera()
+  renderer = getRenderer()
+  renderer.render(scene, camera);
+  controls.update();
 };
 
 function createModel(canvasElem) {
 
-    let scene = getScene();
-    loadModel(scene)
-    let camera = getCamera();
-    console.log(scene)
-    let light = getLight(scene);
-    let renderer = getRenderer();
-    let controls = getControls(camera, renderer);
+  let scene = getScene();
+  let camera = getCamera();
+  console.log(scene)
+  let light = getLight(scene);
+  let renderer = getRenderer();
+  let controls = getControls(camera, renderer);
 
-// camera = getCamera()
-// console.log(camera)
-// scene= getScene()
+  loadModel(scene)
 
-    render(camera, scene, renderer, controls);
+  render(camera, scene, renderer);
+
 }
 
 function createOverlay() {
-    const overlay = document.createElement('div')
-    overlay.id = 'model-modal'
-    overlay.classList.add('overlay')
+  const overlay = document.createElement('div')
+  overlay.id = 'model-modal'
+  overlay.classList.add('overlay')
 
-    const closeBtn = document.createElement('a')
-    closeBtn.href = "javascript:void(0)"
-    closeBtn.classList.add('closebtn')
-    closeBtn.innerHTML = "&times;"
-    closeBtn.onclick = function () {
-        overlay.style.display = "none"
-    }
+  const closeBtn = document.createElement('a')
+  closeBtn.href = "javascript:void(0)"
+  closeBtn.classList.add('closebtn')
+  closeBtn.innerHTML = "&times;"
+  closeBtn.onclick = function () {
+    overlay.style.display = "none"
+  }
 
-    overlay.appendChild(closeBtn)
+  overlay.appendChild(closeBtn)
 
-    const overlayContent = document.createElement('div')
-    overlayContent.classList.add("overlay-content")
+  const overlayContent = document.createElement('div')
+  overlayContent.classList.add("overlay-content")
 
-    overlay.appendChild(overlayContent)
+  overlay.appendChild(overlayContent)
 
-    return {
-        overlay,
-        overlayContent,
-        closeBtn
-    }
+  return {
+    overlay,
+    overlayContent,
+    closeBtn
+  }
 }
 
 // function createModel(canvasElem) {
@@ -254,7 +260,7 @@ function createOverlay() {
 //   // camera.position.y = 100;
 //   // camera.position.z = 1000;
 //   // console.log(content)
-//   // var renderer = new THREE.WebGLRenderer();
+//   // let renderer = new THREE.WebGLRenderer();
 //   // renderer.setSize(window.innerWidth,window.innerHeight);
 //   // $(content).append(renderer.domElement);
 
@@ -278,23 +284,23 @@ function createOverlay() {
 //   // scene.add(light4);
 
 //   // // Create cube and add to scene.
-//   // var geometry = new THREE.BoxGeometry(200, 200, 200);
+//   // let geometry = new THREE.BoxGeometry(200, 200, 200);
 //   // mesh = new THREE.Mesh(geometry, material);
 //   // scene.add(mesh);
 
 // }
 
-// function disposeModel() {
-//     scene = null
-//     hlight = null
-//     loader = null
-//     camera = null
-//     directionalLight = null
-//     light = null
-//     light2 = null
-//     light3 = null
-//     light4 = null
-// }
+function disposeModel() {
+  scene = null
+  hlight = null
+  loader = null
+  camera = null
+  directionalLight = null
+  light = null
+  light2 = null
+  light3 = null
+  light4 = null
+}
 
 const images = document.querySelectorAll('img');
 
@@ -304,16 +310,16 @@ const htmlButton = `
   </button>`;
 
 images.forEach((img) => {
-    if (img.src.includes('https') && (img.src.includes('.jpg') || img.src.includes('jpeg'))) {
-        const parent = img.parentNode;
-        const wrapper = document.createElement('div');
+  if (img.src.includes('https') && (img.src.includes('.jpg') || img.src.includes('jpeg'))) {
+    const parent = img.parentNode;
+    const wrapper = document.createElement('div');
 
-        parent.replaceChild(wrapper, img);
-        wrapper.appendChild(img);
+    parent.replaceChild(wrapper, img);
+    wrapper.appendChild(img);
 
-        wrapper.classList.add('codecopy');
-        wrapper.firstChild.insertAdjacentHTML('beforebegin', htmlButton);
-    }
+    wrapper.classList.add('codecopy');
+    wrapper.firstChild.insertAdjacentHTML('beforebegin', htmlButton);
+  }
 });
 
 // Replace tooltip message when mouse leaves button
@@ -326,24 +332,24 @@ const {overlay, overlayContent} = createOverlay()
 document.querySelector('body').appendChild(overlay)
 
 btns.forEach((btn) => {
-    btn.addEventListener('mouseleave', (e) => {
-        e.target.setAttribute('aria-label', 'Click to show model');
-        e.target.blur();
-    });
+  btn.addEventListener('mouseleave', (e) => {
+    e.target.setAttribute('aria-label', 'Click to show model');
+    e.target.blur();
+  });
 
-    btn.addEventListener('click', (e) => {
-        e.preventDefault()
-        // disposeModel()
-        const content = document.createElement('div')
-        const canvasElem = document.createElement('canvas');
-        content.appendChild(canvasElem)
-        canvasElem.setAttribute("id", "c")
-        createModel(canvasElem)
-        if (overlayContent.firstChild) {
-            overlayContent.removeChild(overlayContent.firstChild)
-        }
-        overlayContent.appendChild(content)
-        overlay.style.display = "block"
-        console.log(overlay)
-    });
+  btn.addEventListener('click', (e) => {
+    e.preventDefault()
+    disposeModel()
+    const content = document.createElement('div')
+    const canvasElem = document.createElement('canvas');
+    content.appendChild(canvasElem)
+    canvasElem.setAttribute("id", "c")
+    createModel(canvasElem)
+    if (overlayContent.firstChild) {
+      overlayContent.removeChild(overlayContent.firstChild)
+    }
+    overlayContent.appendChild(content)
+    overlay.style.display = "block"
+    console.log(overlay)
+  });
 });
