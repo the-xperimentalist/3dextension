@@ -45,11 +45,11 @@ function getCamera() {
 **/
 
 function getLight(scene) {
-  var light = new THREE.PointLight(0xffffff, 1, 0);
+  let light = new THREE.PointLight(0xffffff, 1, 0);
   light.position.set(1, 1, 1);
   scene.add(light);
 
-  var ambientLight = new THREE.AmbientLight(0x111111);
+  let ambientLight = new THREE.AmbientLight(0x111111);
   scene.add(ambientLight);
   return light;
 }
@@ -60,8 +60,8 @@ function getLight(scene) {
 
 function getRenderer() {
   // Create the canvas with a renderer
-  var canvasElem = document.querySelector("#c");
-  var renderer = new THREE.WebGLRenderer({canvasElem});
+  let canvasElem = document.querySelector("#c");
+  let renderer = new THREE.WebGLRenderer({canvasElem});
   // Add support for retina displays
   renderer.setPixelRatio(window.devicePixelRatio);
   // Specify the size of the canvas
@@ -78,7 +78,7 @@ function getRenderer() {
 **/
 
 function getControls(camera, renderer) {
-  var controls = new THREE.TrackballControls(camera, renderer.domElement);
+  let controls = new THREE.TrackballControls(camera, renderer.domElement);
   controls.zoomSpeed = 0.4;
   controls.panSpeed = 0.4;
   return controls;
@@ -88,8 +88,8 @@ function getControls(camera, renderer) {
 * Load Nimrud model
 **/
 
-function loadModel() {
-  var loader = new THREE.OBJLoader();
+function loadModel(scene) {
+  let loader = new THREE.OBJLoader();
   loader.load( "https://threejsfundamentals.org/threejs/resources/models/windmill/windmill.obj", function ( object ) {
     object.rotation.z = Math.PI;
     scene.add( object );
@@ -104,26 +104,24 @@ function loadModel() {
 function render(camera, scene, renderer) {
   requestAnimationFrame(render);
   console.log(camera)
+  camera = getCamera()
+  renderer = getRenderer()
   renderer.render(scene, camera);
   controls.update();
 };
 
 function createModel(canvasElem) {
-  
-loadModel()
+    
+  let scene = getScene();
+  let camera = getCamera();
+  console.log(scene)
+  let light = getLight(scene);
+  let renderer = getRenderer();
+  let controls = getControls(camera, renderer);
 
-let scene = getScene();
-let camera = getCamera();
-console.log(scene)
-let light = getLight(scene);
-let renderer = getRenderer();
-let controls = getControls(camera, renderer);
+  loadModel(scene)
 
-// camera = getCamera()
-// console.log(camera)
-// scene= getScene()
-
-render(camera, scene, renderer);
+  render(camera, scene, renderer);
 
 }
 
@@ -262,7 +260,7 @@ function createOverlay() {
 //   // camera.position.y = 100;
 //   // camera.position.z = 1000;
 //   // console.log(content)
-//   // var renderer = new THREE.WebGLRenderer();
+//   // let renderer = new THREE.WebGLRenderer();
 //   // renderer.setSize(window.innerWidth,window.innerHeight);
 //   // $(content).append(renderer.domElement);
 
@@ -286,7 +284,7 @@ function createOverlay() {
 //   // scene.add(light4);
 
 //   // // Create cube and add to scene.
-//   // var geometry = new THREE.BoxGeometry(200, 200, 200);
+//   // let geometry = new THREE.BoxGeometry(200, 200, 200);
 //   // mesh = new THREE.Mesh(geometry, material);
 //   // scene.add(mesh);
 
