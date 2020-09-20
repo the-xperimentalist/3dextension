@@ -35,19 +35,22 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     if (request.method === "addModel") {
         // const data = await client('accounts/current_user', {token})
         // sendResponse({data})
-        const {webDomain, imgURL, modelFile, imageName, token} = request.message
-        const formData = new FormData()
-        formData.append('web_domain', webDomain)
-        formData.append('image_url', imgURL)
-        formData.append('model_file', modelFile)
-        formData.append('image_name', imageName)
-        client('imageto3d/', {data: formData, token, stringify: false})
-            .then(() => {
-                sendResponse(true)
+        const {webDomain, imgURL, blobFile, imageName, token} = request.message
+        window.fetch(blobFile).then(r => r.blob()).then(modelFile => {
+            let formData = new FormData()
+            formData.append('web_domain', webDomain)
+            formData.append('image_url', imgURL)
+            formData.append('model_file', modelFile, modelFile.name)
+            formData.append('image_name', imageName)
+            client('imageto3d/', {data: formData, token, stringify: false})
+                .then(() => {
+                    sendResponse(true)
+                })
+                .catch(() => {
+                    sendResponse(false)
+                })
             })
-            .catch(() => {
-                sendResponse(false)
-            })
+
         return true;
     } else if (request.method === "getToken") {
         const requestData = JSON.parse(request.message)

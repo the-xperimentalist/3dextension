@@ -9,6 +9,7 @@ from rest_framework.authentication import (
     SessionAuthentication
 )
 from rest_framework.response import Response
+from .azure_helpers import *
 
 
 def home_page(request):
@@ -32,10 +33,16 @@ class Imageto3dViewset(viewsets.ModelViewSet):
             modified_img_url = request.data["image_url"].split("/")
             del modified_img_url[5]
             del modified_img_url[5]
-            request.data["image_url"] = " ".join(modified_img_url)
+            request.data["image_url"] = "/".join(modified_img_url)
+
         elif not domain_name in self.request.user.username:
             return Response(status=403)
         request.data["created_by"] = self.request.user.id
+        model_url = upload_file_to_blob(request.FILES.get("model_file"), request.data["image_name"])
+        if not model_url:
+            return Response(status=400)
+        request.data["model_url"] = model_url
+        # return Response(status=200)
         return super().create(request, *args, **kwargs)
 
 class Imageto3dAPI(APIView):

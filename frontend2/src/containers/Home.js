@@ -9,11 +9,9 @@ function Home() {
     return (
         <div>
             <span>Hi <h3>{user.username}</h3></span>
-
-            <button onClick={() => setOpenAddModel(true)}>Add model here</button>
             {openAddModel ? (
                 <AddModel setOpenAddModel={setOpenAddModel} />
-            ) : null}
+            ) : <button onClick={() => setOpenAddModel(true)}>Add model here</button>}
         </div>
     )
 }

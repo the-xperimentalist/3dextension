@@ -12,15 +12,18 @@ function AddModel({setOpenAddModel}) {
     const [imageName, setImageName] = useState('')
 
     const onSubmitHandler = useCallback(() => {
-        const formData = new FormData()
-        formData.append('web_domain', webDomain)
-        formData.append('image_url', imgURL)
-        formData.append('model_file', modelFile, modelFile.name)
-        formData.append('image_name', imageName)
-
+        const blobFile = window.URL.createObjectURL(modelFile)
+        // console.log(blobFile)
+        // const reader = new FileReader();
+        // let result = null
+        // reader.onload = function(e){
+        //   result = e.target.result
+        // }
+        // reader.readAsDataURL(modelFile)
+        // console.log(result)
         chrome.tabs.query({active: true, currentWindow: true}, tabs => {
           chrome.runtime.sendMessage({method: "addModel", message: {
-              imageName, imgURL, webDomain, modelFile, token: user.token
+              imageName, imgURL, webDomain, blobFile, token: user.token
               }}, function (response) {
               console.log('successfully added image')
             setOpenAddModel(false)

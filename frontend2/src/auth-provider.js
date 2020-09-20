@@ -4,11 +4,12 @@ import {parseJwt} from "./utils/helpers";
 const localStorageKey = '__auth_provider_token__'
 
 async function getToken() {
-    let token = null
-    chrome.storage.sync.get([localStorageKey], function(result) {
-      token = result[localStorageKey]
-    });
-    return token
+    return new Promise((resolve) => {
+        chrome.storage.sync.get([localStorageKey], function(result) {
+            resolve(result[localStorageKey])
+        });
+    })
+
 }
 
 function handleUserResponse({token}) {

@@ -16,6 +16,15 @@
   "background": {
     "scripts": ["./jquery.js", "background.js"]
   },
+  "file_browser_handlers": [
+    {
+      "id": "upload",
+      "default_title": "Save to Gallery",
+      "file_filters": [
+        "filesystem:*.obj"
+      ]
+    }
+  ],
   "content_scripts": [{
     "matches": ["<all_urls>"],
     "css": [
@@ -24,6 +33,7 @@
     "js": [
       "./three.min.js",
       "./OBJLoader.js",
+      "./TrackballControls.js",
       "./jquery.js",
       "./content.js"
     ]
@@ -31,7 +41,8 @@
   "permissions": [
     "<all_urls>",
     "activeTab",
-    "storage"
+    "storage",
+    "fileBrowserHandler"
   ],
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
 }
