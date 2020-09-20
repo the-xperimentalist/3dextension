@@ -22,6 +22,8 @@
       "./content-scripts.css"
     ],
     "js": [
+      "./three.min.js",
+      "./OBJLoader.js",
       "./jquery.js",
       "./content.js"
     ]
