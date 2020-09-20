@@ -5,3 +5,6 @@ local-sp.json
 setup_env.sh
 
 db.sqlite3
+.idea
+*/node_modules
+*/build
