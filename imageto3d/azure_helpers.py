@@ -51,7 +51,7 @@ def upload_file_to_blob(file, file_name):
         print("Uploaded")
         return settings.AZURE_STORAGE_BLOB_URL_CONSTANT+file_name
     except ResourceExistsError:
-        return "Resource exists"
+        return False
     except:
         logging.exception("Got an exception")
-        pass
+        return False

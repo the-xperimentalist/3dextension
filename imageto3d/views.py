@@ -39,6 +39,8 @@ class Imageto3dViewset(viewsets.ModelViewSet):
             return Response(status=403)
         request.data["created_by"] = self.request.user.id
         model_url = upload_file_to_blob(request.FILES.get("model_file"), request.data["image_name"])
+        if not model_url:
+            return Response(status=400)
         request.data["model_url"] = model_url
         # return Response(status=200)
         return super().create(request, *args, **kwargs)
