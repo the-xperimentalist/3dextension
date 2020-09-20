@@ -128,7 +128,7 @@ document.body.appendChild( renderer.domElement );
 
     console.log(window.location.href)
 
-    objLoader.load('https://threedextensionmodel.blob.core.windows.net/uploadmodelsontainer/mugobj.obj', (root) => {
+    objLoader.load('https://threejsfundamentals.org/threejs/resources/models/windmill/windmill.obj', (root) => {
       scene.add(root);
     });
   }

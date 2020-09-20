@@ -40,5 +40,5 @@
     "features": ["webgl"]
     }
   },
-  "content_security_policy": "script-src 'self' https://threedextensionmodel https://github.com/ 'unsafe-eval'; object-src 'self'"
+  "content_security_policy": "script-src 'self' https://threejsfundamentals.org 'unsafe-eval'; object-src 'self'"
 }
