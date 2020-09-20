@@ -10,3 +10,4 @@ azure_constants.py
 .idea
 */node_modules
 */build
+.DS_Store

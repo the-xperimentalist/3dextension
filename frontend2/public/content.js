@@ -28,78 +28,137 @@ function createOverlay() {
 let scene, camera, hlight, light, light2, light3, light4, loader, directionalLight
 
 function createModel(content) {
-  // scene = new THREE.Scene()
-  // scene.background = new THREE.Color(0xdddddd)
-  //
-  // camera = new THREE.PerspectiveCamera(40, window.innerWidth/window.innerHeight, 1, 5000)
-  // camera.rotation.y = 45/180*Math.PI;
-  // camera.position.x = 800;
-  // camera.position.y = 100;
-  // camera.position.z = 1000;
-  // var renderer = new THREE.WebGLRenderer({antialias:true});
-  // renderer.setSize(window.innerWidth,window.innerHeight);
-  //
-  // hlight = new THREE.AmbientLight (0x404040,100);
-  // scene.add(hlight);
-  // directionalLight = new THREE.DirectionalLight(0xffffff,100);
-  // directionalLight.position.set(0,1,0);
-  // directionalLight.castShadow = true;
-  // scene.add(directionalLight);
-  // light = new THREE.PointLight(0xc4c4c4,10);
-  // light.position.set(0,300,500);
-  // scene.add(light);
-  // light2 = new THREE.PointLight(0xc4c4c4,10);
-  // light2.position.set(500,100,0);
-  // scene.add(light2);
-  // light3 = new THREE.PointLight(0xc4c4c4,10);
-  // light3.position.set(0,100,-500);
-  // scene.add(light3);
-  // light4 = new THREE.PointLight(0xc4c4c4,10);
-  // light4.position.set(-500,300,500);
-  // scene.add(light4);
-  //
-  // loader = new THREE.OBJLoader();
-  // console.log(loader);
-  // loader.load("https://threejsfundamentals.org/threejs/resources/models/windmill/windmill.obj", function(object) {
-  //   // o = object.scene.children[0];
-  //   // o.scale.set(0.5,0.5,0.5);
-  //   scene.add(object);
-    // animate();
-    // scene.add(object);
-// var geometry = new THREE.BoxGeometry();
-// var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-// var cube = new THREE.Mesh( geometry, material );
-// scene.add( cube );
+
+// var scene = new THREE.Scene();
 //
-// camera.position.z = 5;
-// cube.rotation.x += 0.01;
-// cube.rotation.y += 0.01;
-// $(content).append(renderer.domElement);
-  // });
-  var scene = new THREE.Scene();
-	var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+// var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
+// camera.position.z = 200;
+//
+// var renderer = new THREE.WebGLRenderer();
+// renderer.setSize( window.innerWidth, window.innerHeight );
+// document.body.appendChild( renderer.domElement );
+//
+// var keyLight = new THREE.DirectionalLight(new THREE.Color('hsl(30, 100%, 75%)'), 1.0);
+// keyLight.position.set(-100, 0, 100);
+//
+// var fillLight = new THREE.DirectionalLight(new THREE.Color('hsl(240, 100%, 75%)'), 0.75);
+// fillLight.position.set(100, 0, 100);
+//
+// var backLight = new THREE.DirectionalLight(0xffffff, 1.0);
+// backLight.position.set(100, 0, -100).normalize();
+//
+// scene.add(keyLight);
+// scene.add(fillLight);
+// scene.add(backLight);
+//
+// var objLoader = new THREE.OBJLoader();
+// objLoader.load('https://threejsfundamentals.org/threejs/resources/models/windmill/windmill.obj', function (object) {
+//     scene.add(object);
+//
+// });
+//
+// var animate = function () {
+// 	requestAnimationFrame( animate );
+// 	renderer.render(scene, camera);
+// };
+//
+// animate();
 
-	var renderer = new THREE.WebGLRenderer();
-	renderer.setSize( window.innerWidth, window.innerHeight );
-	document.body.appendChild( renderer.domElement );
 
-	var geometry = new THREE.BoxGeometry();
-	var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-	var cube = new THREE.Mesh( geometry, material );
-	scene.add( cube );
 
-  camera.position.z = 5;
+const renderer = new THREE.WebGLRenderer();
+renderer.setSize( window.innerWidth, window.innerHeight );
+document.body.appendChild( renderer.domElement );
 
-	var animate = function () {
-		requestAnimationFrame( animate );
+  const fov = 45;
+  const aspect = 2;  // the canvas default
+  const near = 0.1;
+  const far = 100;
+  const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
+  camera.position.set(0, 10, 20);
 
-		cube.rotation.x += 0.01;
-		cube.rotation.y += 0.01;
+  // const controls = new THREE.OrbitControls(camera, canvas);
+  // controls.target.set(0, 5, 0);
+  // controls.update();
 
-		renderer.render( scene, camera );
-	};
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color('black');
 
-	animate();
+  {
+    const planeSize = 40;
+
+    const loader = new THREE.TextureLoader();
+    const texture = loader.load('https://threejsfundamentals.org/threejs/resources/images/checker.png');
+    texture.wrapS = THREE.RepeatWrapping;
+    texture.wrapT = THREE.RepeatWrapping;
+    texture.magFilter = THREE.NearestFilter;
+    const repeats = planeSize / 2;
+    texture.repeat.set(repeats, repeats);
+
+    const planeGeo = new THREE.PlaneBufferGeometry(planeSize, planeSize);
+    const planeMat = new THREE.MeshPhongMaterial({
+      map: texture,
+      side: THREE.DoubleSide,
+    });
+    const mesh = new THREE.Mesh(planeGeo, planeMat);
+    mesh.rotation.x = Math.PI * -.5;
+    scene.add(mesh);
+  }
+
+  {
+    const skyColor = 0xB1E1FF;  // light blue
+    const groundColor = 0xB97A20;  // brownish orange
+    const intensity = 1;
+    const light = new THREE.HemisphereLight(skyColor, groundColor, intensity);
+    scene.add(light);
+  }
+
+  {
+    const color = 0xFFFFFF;
+    const intensity = 1;
+    const light = new THREE.DirectionalLight(color, intensity);
+    light.position.set(0, 10, 0);
+    light.target.position.set(-5, 0, 0);
+    scene.add(light);
+    scene.add(light.target);
+  }
+
+  {
+    const objLoader = new THREE.OBJLoader();
+
+    console.log(window.location.href)
+
+    objLoader.load('https://threedextensionmodel.blob.core.windows.net/uploadmodelsontainer/mugobj.obj', (root) => {
+      scene.add(root);
+    });
+  }
+
+  function resizeRendererToDisplaySize(renderer) {
+    const canvas = renderer.domElement;
+    const width = canvas.clientWidth;
+    const height = canvas.clientHeight;
+    const needResize = canvas.width !== width || canvas.height !== height;
+    if (needResize) {
+      renderer.setSize(width, height, false);
+    }
+    return needResize;
+  }
+
+  function render() {
+
+    if (resizeRendererToDisplaySize(renderer)) {
+      const canvas = renderer.domElement;
+      camera.aspect = canvas.clientWidth / canvas.clientHeight;
+      camera.updateProjectionMatrix();
+    }
+
+    renderer.render(scene, camera);
+
+    requestAnimationFrame(render);
+  }
+
+  requestAnimationFrame(render);
+
 }
 
 function disposeModel() {
@@ -154,9 +213,9 @@ btns.forEach((btn) => {
     disposeModel()
     const content = document.createElement('div')
     createModel(content)
-    // if (overlayContent.firstChild) {
-    //   overlayContent.removeChild(overlayContent.firstChild)
-    // }
+    if (overlayContent.firstChild) {
+      overlayContent.removeChild(overlayContent.firstChild)
+    }
     console.log(content)
     overlayContent.appendChild(content)
     overlay.style.display = "block"
