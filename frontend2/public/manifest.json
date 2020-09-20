@@ -24,6 +24,7 @@
     "js": [
       "./three.min.js",
       "./OBJLoader.js",
+      "./TrackballControls.js",
       "./jquery.js",
       "./content.js"
     ]

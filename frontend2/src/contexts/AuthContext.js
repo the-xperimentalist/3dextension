@@ -5,6 +5,7 @@ import * as auth from '../auth-provider'
 import {useAsync} from "../utils/hooks";
 import {client} from "../utils/api-client";
 import {FullPageSpinner, FullPageErrorFallback} from '../components/lib'
+import {parseJwt} from "../utils/helpers";
 
 const AuthContext = React.createContext()
 AuthContext.displayName = 'AuthContext'
@@ -13,14 +14,9 @@ async function bootstrapAppData() {
   let user = null
 
   const token = await auth.getToken()
+  console.log('token inside auth context', token)
   if (token) {
-    chrome.tabs.query({active: true, currentWindow: true}, tabs => {
-      console.log('inside tab')
-      chrome.runtime.sendMessage({method: "getCurrentUser"}, response => {
-        console.log('here inside react')
-        user = response.data.user
-      })
-    })
+    user = parseJwt(token)
   }
   return user
 }
@@ -44,7 +40,10 @@ function AuthProvider(props) {
   }, [run])
 
   const login = React.useCallback(
-    form => auth.login(form).then(user => setData(user)),
+    form => auth.login(form).then(user => {
+      console.log('inside auth context', user)
+      setData(user)
+    }),
     [setData]
   )
 

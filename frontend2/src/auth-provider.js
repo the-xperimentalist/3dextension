@@ -1,31 +1,47 @@
 /*global chrome*/
+import {parseJwt} from "./utils/helpers";
+
 const localStorageKey = '__auth_provider_token__'
 
 async function getToken() {
-    return window.localStorage.getItem(localStorageKey)
+    let token = null
+    chrome.storage.sync.get([localStorageKey], function(result) {
+      token = result[localStorageKey]
+    });
+    return token
 }
 
 function handleUserResponse({token}) {
-    window.localStorage.setItem(localStorageKey, token)
+    chrome.storage.sync.set({[localStorageKey]: token}, function() {
+      console.log('Value is set to empty value');
+    });
+    return parseJwt(token)
 }
 
 function login(form) {
     return new Promise((resolve) => {
         chrome.tabs.query({active: true, currentWindow: true}, tabs => {
-          chrome.runtime.sendMessage({method: "getToken", message: JSON.stringify(form)}, response => {
-            console.log('here inside getToken react', response)
-            resolve(handleUserResponse(response.data))
+          chrome.runtime.sendMessage({method: "getToken", message: JSON.stringify(form)}, function (response) {
+            resolve(handleUserResponse(response))
             })
         })
     })
 }
 
-function register({username, password}) {
-    return client('accounts/users/', {username, password}).then(handleUserResponse)
+function register(form) {
+    return new Promise((resolve) => {
+        chrome.tabs.query({active: true, currentWindow: true}, tabs => {
+          chrome.runtime.sendMessage({method: "registerUser", message: form}, function (response) {
+            resolve(handleUserResponse(response))
+            })
+        })
+    })
 }
 
 async function logout() {
-    window.localStorage.removeItem(localStorageKey)
+    chrome.storage.sync.set({[localStorageKey]: ''}, function() {
+      console.log('Value is set to empty value');
+    });
 }
 
 // const authURL = process.env.REACT_APP_AUTH_URL || 'http://localhost:8000'
