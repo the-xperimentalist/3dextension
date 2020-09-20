@@ -12,7 +12,8 @@ from rest_framework.response import Response
 
 
 def home_page(request):
-    return render(request, 'index.html')
+    print("Here")
+    return render(request, 'main/index.html', {})
 
 
 class Imageto3dViewset(viewsets.ModelViewSet):

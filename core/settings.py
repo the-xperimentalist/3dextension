@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'accounts',
-    'imageto3d'
+    'imageto3d',
+    'rest_framework'
 ]
 
 MIDDLEWARE = [
