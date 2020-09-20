@@ -28,41 +28,78 @@ function createOverlay() {
 let scene, camera, hlight, light, light2, light3, light4, loader, directionalLight
 
 function createModel(content) {
-  scene = new THREE.Scene()
-  scene.background = new THREE.Color(0xdddddd)
+  // scene = new THREE.Scene()
+  // scene.background = new THREE.Color(0xdddddd)
+  //
+  // camera = new THREE.PerspectiveCamera(40, window.innerWidth/window.innerHeight, 1, 5000)
+  // camera.rotation.y = 45/180*Math.PI;
+  // camera.position.x = 800;
+  // camera.position.y = 100;
+  // camera.position.z = 1000;
+  // var renderer = new THREE.WebGLRenderer({antialias:true});
+  // renderer.setSize(window.innerWidth,window.innerHeight);
+  //
+  // hlight = new THREE.AmbientLight (0x404040,100);
+  // scene.add(hlight);
+  // directionalLight = new THREE.DirectionalLight(0xffffff,100);
+  // directionalLight.position.set(0,1,0);
+  // directionalLight.castShadow = true;
+  // scene.add(directionalLight);
+  // light = new THREE.PointLight(0xc4c4c4,10);
+  // light.position.set(0,300,500);
+  // scene.add(light);
+  // light2 = new THREE.PointLight(0xc4c4c4,10);
+  // light2.position.set(500,100,0);
+  // scene.add(light2);
+  // light3 = new THREE.PointLight(0xc4c4c4,10);
+  // light3.position.set(0,100,-500);
+  // scene.add(light3);
+  // light4 = new THREE.PointLight(0xc4c4c4,10);
+  // light4.position.set(-500,300,500);
+  // scene.add(light4);
+  //
+  // loader = new THREE.OBJLoader();
+  // console.log(loader);
+  // loader.load("https://threejsfundamentals.org/threejs/resources/models/windmill/windmill.obj", function(object) {
+  //   // o = object.scene.children[0];
+  //   // o.scale.set(0.5,0.5,0.5);
+  //   scene.add(object);
+    // animate();
+    // scene.add(object);
+// var geometry = new THREE.BoxGeometry();
+// var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+// var cube = new THREE.Mesh( geometry, material );
+// scene.add( cube );
+//
+// camera.position.z = 5;
+// cube.rotation.x += 0.01;
+// cube.rotation.y += 0.01;
+// $(content).append(renderer.domElement);
+  // });
+  var scene = new THREE.Scene();
+	var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 
-  camera = new THREE.PerspectiveCamera(40, window.innerWidth/window.innerHeight, 1, 5000)
-  camera.rotation.y = 45/180*Math.PI;
-  camera.position.x = 800;
-  camera.position.y = 100;
-  camera.position.z = 1000;
-  var renderer = new THREE.WebGLRenderer({antialias:true});
-  renderer.setSize(window.innerWidth,window.innerHeight);
-  $(content).append(renderer.domElement);
+	var renderer = new THREE.WebGLRenderer();
+	renderer.setSize( window.innerWidth, window.innerHeight );
+	document.body.appendChild( renderer.domElement );
 
-  hlight = new THREE.AmbientLight (0x404040,100);
-  scene.add(hlight);
-  directionalLight = new THREE.DirectionalLight(0xffffff,100);
-  directionalLight.position.set(0,1,0);
-  directionalLight.castShadow = true;
-  scene.add(directionalLight);
-  light = new THREE.PointLight(0xc4c4c4,10);
-  light.position.set(0,300,500);
-  scene.add(light);
-  light2 = new THREE.PointLight(0xc4c4c4,10);
-  light2.position.set(500,100,0);
-  scene.add(light2);
-  light3 = new THREE.PointLight(0xc4c4c4,10);
-  light3.position.set(0,100,-500);
-  scene.add(light3);
-  light4 = new THREE.PointLight(0xc4c4c4,10);
-  light4.position.set(-500,300,500);
-  scene.add(light4);
+	var geometry = new THREE.BoxGeometry();
+	var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+	var cube = new THREE.Mesh( geometry, material );
+	scene.add( cube );
 
-  loader = new THREE.OBJLoader();
-  loader.load("https://s3-us-west-2.amazonaws.com/s.cdpn.io/557388/star.obj", function(object) {
-    scene.add(object);
-  });
+  camera.position.z = 5;
+
+	var animate = function () {
+		requestAnimationFrame( animate );
+
+		cube.rotation.x += 0.01;
+		cube.rotation.y += 0.01;
+
+		renderer.render( scene, camera );
+	};
+
+	animate();
 }
 
 function disposeModel() {
@@ -117,9 +154,10 @@ btns.forEach((btn) => {
     disposeModel()
     const content = document.createElement('div')
     createModel(content)
-    if (overlayContent.firstChild) {
-      overlayContent.removeChild(overlayContent.firstChild)
-    }
+    // if (overlayContent.firstChild) {
+    //   overlayContent.removeChild(overlayContent.firstChild)
+    // }
+    console.log(content)
     overlayContent.appendChild(content)
     overlay.style.display = "block"
     console.log(overlay)

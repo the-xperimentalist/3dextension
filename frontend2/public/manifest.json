@@ -14,7 +14,8 @@
     "default_popup": "index.html"
   },
   "background": {
-    "scripts": ["./jquery.js", "background.js"]
+    "scripts": ["./jquery.js", "background.js"],
+    "persistent": false
   },
   "content_scripts": [{
     "matches": ["<all_urls>"],
@@ -33,5 +34,10 @@
     "activeTab",
     "storage"
   ],
-  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
+  "requirements": {
+  "3D": {
+    "features": ["webgl"]
+    }
+  },
+  "content_security_policy": "script-src 'self' https://threejsfundamentals.org/threejs/resources/models/windmill/windmill.obj 'unsafe-eval'; object-src 'self'"
 }
