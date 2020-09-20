@@ -14,7 +14,7 @@ import datetime
 from pathlib import Path
 try:
     from .azure_constants import *
-except ImportError:
+except Exception:
     pass
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
