@@ -1,0 +1,48 @@
+{
+  "manifest_version": 2,
+  "name": "3dextension",
+  "description": "3D model extension",
+  "version": "1.0.0",
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
+  "browser_action": {
+    "default_icon": "favicon.png",
+    "default_title": "React Chrome Extension Boilerplate",
+    "default_popup": "index.html"
+  },
+  "background": {
+    "scripts": ["./jquery.js", "background.js"]
+  },
+  "file_browser_handlers": [
+    {
+      "id": "upload",
+      "default_title": "Save to Gallery",
+      "file_filters": [
+        "filesystem:*.obj"
+      ]
+    }
+  ],
+  "content_scripts": [{
+    "matches": ["<all_urls>"],
+    "css": [
+      "./content-scripts.css"
+    ],
+    "js": [
+      "./three.min.js",
+      "./OBJLoader.js",
+      "./TrackballControls.js",
+      "./jquery.js",
+      "./content.js"
+    ]
+  }],
+  "permissions": [
+    "<all_urls>",
+    "activeTab",
+    "storage",
+    "fileBrowserHandler"
+  ],
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
+}
